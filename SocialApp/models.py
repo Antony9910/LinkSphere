@@ -40,5 +40,11 @@ class Stories(models.Model):
     text=models.CharField(max_length=200)
     post_image=models.ImageField(upload_to="stories",null=True,blank=True)
     created_date=models.DateField(auto_now_add=True)
+    exp=created_date+timezone.timedelta(days=1)
+    expiry_date=models.DateField(exp)
     def __str__(self):
         return self.text
+    def save(self,*args,**kwargs):
+        if not self.expiry_date:
+            self.expiry_date=self.created_date+timezone.timedelta(days=1)
+        super().save(*args,**kwargs)
