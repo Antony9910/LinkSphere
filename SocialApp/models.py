@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.db.models.signals import post_save
 from django.utils import timezone
 
 # Create your models here.
 class UserProfile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE,related_name="Profile")
-    address=models.CharField(max_length=200)
-    phone=models.CharField(max_length=200)
+    address=models.CharField(max_length=200,null=True)
+    phone=models.CharField(max_length=200,null=True)
     profilePic=models.ImageField(upload_to="profilePics",null=True,blank=True)
-    dob=models.DateField()
-    bio=models.CharField(max_length=50)
-    block=models.ManyToManyField("self",related_name="block",symmetrical=False)
+    dob=models.DateField(null=True)
+    bio=models.CharField(max_length=50,null=True)
+    block=models.ManyToManyField("self",related_name="block_user",symmetrical=False,null=True)
     
     def __str__(self):
         return self.user.username
@@ -40,11 +41,16 @@ class Stories(models.Model):
     text=models.CharField(max_length=200)
     post_image=models.ImageField(upload_to="stories",null=True,blank=True)
     created_date=models.DateField(auto_now_add=True)
-    exp=created_date+timezone.timedelta(days=1)
-    expiry_date=models.DateField(exp)
+    # exp=created_date+timezone.timedelta(days=1)
+    expiry_date=models.DateField()
     def __str__(self):
         return self.text
     def save(self,*args,**kwargs):
         if not self.expiry_date:
             self.expiry_date=self.created_date+timezone.timedelta(days=1)
         super().save(*args,**kwargs)
+#create signal for creating userprofile object
+def create_profile(sender,created,instance,**kwargs): #created:whether objects are created or not
+    if created:
+        UserProfile.objects.create(user=instance)
+post_save.connect(create_profile,sender=User)  #signal post_save ayi connection ahnu ithu eppolanu connect cheyyane when User model is created
