@@ -20,5 +20,8 @@ from SocialApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/',views.SignUpView.as_view(),name="login")
+    path('register/',views.SignUpView.as_view(),name="register"),
+    path('signin/',views.SignInView.as_view(),name="signin"),
+    path('index/',views.IndexView.as_view(),name="Index"),
+    path('signout/',views.SignOutView.as_view(),name="signout")
 ]
