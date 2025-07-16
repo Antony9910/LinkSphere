@@ -7,12 +7,14 @@ from django.utils import timezone
 # Create your models here.
 class UserProfile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE,related_name="Profile")
+    about=models.CharField(max_length=200,null=True)
     address=models.CharField(max_length=200,null=True)
     phone=models.CharField(max_length=200,null=True)
     profilePic=models.ImageField(upload_to="profilePics",null=True,blank=True)
     dob=models.DateField(null=True)
     bio=models.CharField(max_length=50,null=True)
-    block=models.ManyToManyField("self",related_name="block_user",symmetrical=False,null=True)
+    following=models.ManyToManyField("self",related_name="followed_by",symmetrical=False)
+    block=models.ManyToManyField("self",related_name="block_user",symmetrical=False)
     
     def __str__(self):
         return self.user.username
@@ -31,7 +33,7 @@ class Comments(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE,related_name="comment")
     text=models.CharField(max_length=200)
     created_date=models.DateField(auto_now_add=True)
-    post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name="post_name")
+    post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name="postname")
     
     def __str__(self):
         return self.text

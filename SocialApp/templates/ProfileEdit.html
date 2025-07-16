@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<style>
+      body {
+        background-image: url("{% static 'social/images/back.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+    </style>
+<body>
+    <div>
+        <nav class="bg-dark text-white d-flex p-3 mb-3" style="width:100rem;margin-right:700px">
+            <div >
+        <h6 >LINKSPHERE</h6>
+            </div>
+            <div style="margin-left:1160px">
+             <a href="{%url 'Index'%}" class="btn btn-primary">Home<i class="fa-solid fa-house"></i></a> 
+             
+        {% comment %} <div>
+        <h6 style="margin-left:30px">WELCOME{{request.user}}</h6>
+        </div> {% endcomment %}
+        <a href="{% url 'signout' %}" class="btn btn-primary text-white">
+  Signout {{ request.user }}<i class="fa-solid fa-right-from-bracket"></i>
+</a>
+<div>
+      
+        {% comment %} <button type="submit" class="btn btn-primary text-white" style="margin-left:1190px"><a href="{%url 'signout'%}"></a>Signout{{request.user}}</button> {% endcomment %}
+        </nav>
+    </div>
+    <div class="card"style="width:25rem;margin-top:40px;margin-left:500px">
+  <div class="card-body">
+        <h6 style="margin-left:100px">EDIT USER-PROFILE<i class="fa-solid fa-circle-user"></i></h6>
+        
+   <form action=""method="POST" enctype="multipart/form-data">
+        {%csrf_token%}
+        {% comment %} {{form.as_p}} {% endcomment %}
+        <div style="margin-left:130px">
+          <img src="{{form.profilePic.value.url}}" class="rounded-circle" alt="User Avatar" width="100" height="90">
+
+        </div>
+        <div style="margin-left:120px">
+          Username:{{request.user}}
+        </div>
+                  <div class="form-floating">
+  <textarea class="form-control" placeholder="Leave a comment here" value="{{form.about.value}}" id="floatingTextarea2" name="about" style="height: 100px">{{form.about.value}}</textarea>
+  <label for="floatingTextarea2">Enter your profile</label>
+</div>
+        <div class="input-group mb-3 mt-2">
+  <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user"></i></span>
+  <input type="text" name="address" class="form-control" value="{{form.address.value}}" placeholder="Enter Address" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user"></i></span>
+  <input type="text"name="phone" class="form-control" value="{{form.phone.value}}" placeholder="Enter phone number" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user"></i></span>
+  <input type="file"name="profilePic" class="form-control" placeholder="Select profile pciture"value="{{form.profilePic.value}}" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-calendar-days"></i></span>
+ {{form.dob}}
+</div>
+<div class="input-group mb-3">
+  <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user"></i></span>
+  <input type="text"name="bio" class="form-control"value="{{form.bio.value}}"  placeholder="Enter Bio detail" aria-label="Username" aria-describedby="basic-addon1">
+</div>
+        <button type="submit" class="btn btn-primary" style="margin-left:100px">Edit<i class="fa-solid fa-pen"style="margin-left:2px"></i></button>
+    </form>
+  </div>
+</div>
+   
+</body>
+</html>

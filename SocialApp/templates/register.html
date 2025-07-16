@@ -11,7 +11,7 @@
 <style>
 body{
 
-        background-image: url("{% static 'social/images/register.jpg' %}");
+        background-image: url("{% static 'social/images/backv.jpg' %}");
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
@@ -26,6 +26,7 @@ body{
      <form action="" method="POST">
             {% csrf_token %}
             <h6>USER-REGISTRATION<i class="fa-solid fa-circle-user"></i></h6>
+  
             <div class="input-group mb-3">
   <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user"></i></span>
   <input type="text" class="form-control"name="username" placeholder="Enter Username" aria-label="Username" aria-describedby="basic-addon1">

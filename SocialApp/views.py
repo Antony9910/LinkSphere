@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 
-from django.views.generic import FormView,CreateView,TemplateView,View
+from django.views.generic import FormView,CreateView,TemplateView,View,UpdateView,DetailView
 
-from SocialApp.forms import RegistrationForm,LoginForm
+from SocialApp.forms import RegistrationForm,LoginForm,UserProfileForm
 from django.contrib.auth import authenticate,login,logout
+from SocialApp.models import UserProfile
 
 #Rendering this form into html page
 class SignUpView(CreateView):
@@ -15,7 +16,7 @@ class SignUpView(CreateView):
    form_class=RegistrationForm
    def get_success_url(self):
       print("register success")
-      return reverse("register")
+      return reverse("signin")
   
 #    def post(self,request,*args,**kwargs):
 #        form=RegistrationForm(request.POST)
@@ -46,3 +47,18 @@ class SignOutView(View):
     def get(self,request,*args,**kwargs):
         logout(request)
         return redirect("signin")    
+class ProfileUpdateView(UpdateView):
+    template_name="ProfileEdit.html"
+    form_class=UserProfileForm
+    model=UserProfile
+    def get_success_url(self):
+        return reverse("Index")
+class ProfileDetailView(DetailView):
+    template_name="ProfileDetail.html"
+    model=UserProfile
+    context_object_name="data"
+    
+class ProfileListView(View):
+    def get(self,request,*args,**kwargs):
+        qs=UserProfile.objects.all()
+        return render(request,"profileList.html",{"data":qs})

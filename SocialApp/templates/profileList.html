@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+  <title>Document</title>
+</head>
+<body>
+<div>
+        <nav class="bg-dark text-white d-flex p-3 fixed-top" style="width:100rem;margin-right">
+            <div >
+        <h6 style="margin-left:50px">LINKSPHERE</h6>
+            </div>
+            <div style="margin-left:1000px" class="d-flex">
+         
+         <a href="{% url 'Index' %}" class="btn btn-primary">Home<i class="fa-solid fa-house"></i></a>
+                 <a href="{%url 'profile-update' request.user.Profile.id %}" class="btn btn-primary"style="margin-left:20px">Edit-Profile<i class="fa-solid fa-user-pen"></i></a> 
+
+        {% comment %} <div>
+        <h6 style="margin-left:30px">WELCOME{{request.user}}</h6>
+        </div> {% endcomment %}
+        <a href="{% url 'signout' %}" class="btn btn-primary text-white" style="margin-left:10px">
+  Signout<i class="fa-solid fa-right-from-bracket"></i>
+</a>
+<div>
+      
+      
+        </nav>
+    </div>
+<div class="container mt-4">
+  <div class="row">
+    {% for profile in data %}
+    <div class="col-md-4 mb-4">
+      <div class="card mt-5" style="width: 100%;">
+        {%if profile.profilePic%}
+    <img src="{{profile.profilePic.url}}" class="card-img-top">
+    {%else%}
+  <img src="{% static "social/images/profilepic.jpg" %}" class="card-img-top" alt="Antony's application photo" >
+  {%endif%}
+        <div class="card-body">
+
+          <a href="{%url 'profile-detail' profile.id %}">{{profile}}</a>
+               <h5 class="card-title">Following:{{ profile.following.count}}</h5>
+                 <h5 class="card-title">Followers:{{ profile.followed_by.count}}</h5>
+            
+           <h5 class="card-title">{{ profile.bio}}</h5>
+
+          <button type="submit" class="btn btn-primary">Follow</button>
+            <button type="submit" class="btn btn-primary">UnFollow</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+</body>
+</html>

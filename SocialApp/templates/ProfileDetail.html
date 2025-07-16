@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+{% comment %} <style>
+    body{
+        background-color:black;
+    }
+</style> {% endcomment %}
+<body>
+    <div>
+        <nav class="bg-dark text-white d-flex p-3 fixed-top" style="width:100rem;margin-right">
+            <div >
+        <h6 style="margin-left:50px">LINKSPHERE</h6>
+            </div>
+            <div style="margin-left:1000px" class="d-flex">
+         
+         <a href="{% url 'Index' %}" class="btn btn-primary">Home<i class="fa-solid fa-house"></i></a>
+                {%if data.user == request.user%} 
+                 <a href="{%url 'profile-update' request.user.Profile.id %}" class="btn btn-primary"style="margin-left:10px">Edit-Profile<i class="fa-solid fa-user-pen"></i></a> 
+                {%endif%}
+        {% comment %} <div>
+        <h6 style="margin-left:30px">WELCOME{{request.user}}</h6>
+        </div> {% endcomment %}
+        <a href="{% url 'signout' %}" class="btn btn-primary text-white" style="margin-left:5px">
+  Signout<i class="fa-solid fa-right-from-bracket"></i>
+</a>
+<div>
+      
+        {% comment %} <button type="submit" class="btn btn-primary text-white" style="margin-left:1190px"><a href="{%url 'signout'%}"></a>Signout{{request.user}}</button> {% endcomment %}
+        </nav>
+    </div>
+   
+    <h1 style="margin-Left:700px;margin-top:100px">USER-PROFILE<i class="fa-solid fa-circle-user"></i></h1>
+
+    <div style="margin-left:750px">
+        <button type="submit" class="btn btn-primary">Follow</button>
+        <button type="submit" class="btn btn-danger">UnFollow</button>
+        <div class="card" style="margin-top:10px;;width:35rem;margin-left:-100px">
+  <div class="card-body d-flex">
+     <div>
+    <img src="{{data.profilePic.url}}" class="rounded-circle" alt="User Avatar" width="50" height="50">
+     <h6>{{request.user}}</h6>
+    </div>
+    <div style="margin-left:20px">
+        <h5 class="text-primary">{{data.following.count}}</h5>
+        <h6>Following</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5 class="text-primary">{{data.followed_by.count}}</h5>
+        <h6>Followers</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5 class="text-primary">{{data.block.count}}</h5>
+        <h6>Blocked</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5 class="text-primary">{{data.user.PostUsers.all.count}}</h5>
+        <h6>Posts</h6>
+    </div>
+  </div>
+</div>
+    </div>
+    <div class="d-flex">
+   <div class="card" style="width: 18rem;margin-top:90px;margin-left:270px">
+    {%if data.profilePic%}
+    <img src="{{data.profilePic.url}}" class="card-img-top">
+    {%else%}
+  <img src="{% static "social/images/profilepic.jpg" %}" class="card-img-top" alt="Antony's application photo">
+  {%endif%}
+   </div>
+
+<div style="margin-top:90px;margin-left:100px">
+       
+        <h6 style="margin-left:350px;margin-top:2px">About {{request.user}}</h6>
+       <div>
+         {%if data.about%}
+    {{data.about}}
+    {%else%}
+<h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h6>
+  {%endif%}
+       </div>
+       <h6 style="margin-left:350px">PROFILE-DETAILS<i class="fa-solid fa-circle-user"></i></h6>
+    <div>
+       Name: {{request.user}}
+      
+    </div>
+    <div>
+       Bio: {{data.bio}}
+      
+    </div>
+
+ <div>
+ Address:{{data.address}}
+ </div>
+ {% comment %} <div>
+ Phone Number:{{data.phone}}
+ </div> {% endcomment %}
+ <div class>
+ Date of Birth:{{data.dob}}
+ </div>
+ <div class>
+ Phone Number:{{data.phone}}
+ </div>
+   </div>
+</div>
+{% comment %} <div class="card" style="margin-top:20px;;width:35rem;margin-left:400px">
+  <div class="card-body d-flex">
+    <div style="margin-left:20px">
+        <h5>{{data.following.count}}</h5>
+        <h6>Following</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5>{{data.followed_by.count}}</h5>
+        <h6>Followers</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5>{{data.block.count}}</h5>
+        <h6>Blocked</h6>
+    </div>
+    <div style="margin-left:45px">
+        <h5>{{data.user.PostUsers.all.count}}</h5>
+        <h6>Posts</h6>
+    </div>
+  </div>
+</div> {% endcomment %}
+</body>
+
+</html>
