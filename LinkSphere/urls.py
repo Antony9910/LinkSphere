@@ -29,4 +29,7 @@ urlpatterns = [
     path('profiles/<int:pk>/change',views.ProfileUpdateView.as_view(),name="profile-update"),
     path('profiles/<int:pk>',views.ProfileDetailView.as_view(),name="profile-detail"),
     path('profiles/all',views.ProfileListView.as_view(),name="profileList"),
+    path('follow/<int:pk>/follow',views.FollowView.as_view(),name="Follow"),
+    path('post/<int:pk>/liked',views.PostLikeView.as_view(),name="like"),
+    path('post/<int:pk>/comments/add',views.CommentView.as_view(),name="comment")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

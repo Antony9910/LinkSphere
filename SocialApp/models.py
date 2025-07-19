@@ -33,7 +33,7 @@ class Comments(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE,related_name="comment")
     text=models.CharField(max_length=200)
     created_date=models.DateField(auto_now_add=True)
-    post=models.ForeignKey(Posts,on_delete=models.CASCADE,related_name="postname")
+    post=models.ForeignKey(Posts,related_name="post_comments",on_delete=models.CASCADE)
     
     def __str__(self):
         return self.text

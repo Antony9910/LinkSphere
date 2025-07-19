@@ -3,32 +3,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <title>Document</title>
 </head>
 <body>
-<div>
+{% comment %} <div>
         <nav class="bg-dark text-white d-flex p-3 fixed-top" style="width:100rem;margin-right">
             <div >
         <h6 style="margin-left:50px">LINKSPHERE</h6>
             </div>
-            <div style="margin-left:1000px" class="d-flex">
+            <div style="margin-left:1100px" class="d-flex">
          
          <a href="{% url 'Index' %}" class="btn btn-primary">Home<i class="fa-solid fa-house"></i></a>
-                 <a href="{%url 'profile-update' request.user.Profile.id %}" class="btn btn-primary"style="margin-left:20px">Edit-Profile<i class="fa-solid fa-user-pen"></i></a> 
+              
 
-        {% comment %} <div>
-        <h6 style="margin-left:30px">WELCOME{{request.user}}</h6>
-        </div> {% endcomment %}
-        <a href="{% url 'signout' %}" class="btn btn-primary text-white" style="margin-left:10px">
+      
+        <a href="{% url 'signout' %}" class="btn btn-danger text-white" style="margin-left:10px">
   Signout<i class="fa-solid fa-right-from-bracket"></i>
 </a>
 <div>
       
       
         </nav>
+    </div> {% endcomment %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">LINKSPHERE</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{%url 'Index'%}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'profileList'%}">Profile</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu">
+             <li><a class="dropdown-item" href="{% url 'profile-detail' user.Profile.pk %}">Edit-Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'profileList'%}">View Profiles</a></li>
+           <li><a class="dropdown-item" href="{%url 'profile-update' request.user.Profile.id %}">Edit-Profile</a></li>
+           
+          </ul>
+        </li>
+        {% comment %} <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li> {% endcomment %}
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+         <a href="{% url 'signout' %}" class="btn text-white bg-primary">
+  Signout
+</a>
+      </form>
+      
+ {% if request.user.Profile.profilePic %}
+  <img src="{{ request.user.Profile.profilePic.url }}" class="rounded-circle" alt="User Avatar" width="50" height="50">
+{% else %}
+  <img src="{% static 'social/images/login.png' %}" class="rounded-circle" alt="Default Avatar" width="50" height="50">
+{% endif %}
+    </div>
+  </div>
+</nav>
+
+<div>
+      
+     
+        </nav>
+       
     </div>
 <div class="container mt-4">
   <div class="row">
@@ -47,9 +99,16 @@
                  <h5 class="card-title">Followers:{{ profile.followed_by.count}}</h5>
             
            <h5 class="card-title">{{ profile.bio}}</h5>
-
-          <button type="submit" class="btn btn-primary">Follow</button>
-            <button type="submit" class="btn btn-primary">UnFollow</button>
+       
+       <form action="{%url 'Follow' profile.id %}"method="post">
+        {% csrf_token %}
+        {%if profile in request.user.Profile.following.all%}
+         <button type="submit"name="action"value="unfollow" class="btn btn-danger">UnFollow</button>
+         
+          {%else%}
+           <button type="submit"name="action"value="follow" class="btn btn-primary">Follow</button>
+            {%endif%}
+       </form>
         </div>
       </div>
     </div>
