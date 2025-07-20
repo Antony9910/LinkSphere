@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User #import user models
 from django.contrib.auth.forms import UserCreationForm #import usercreationForm for registation
 from django import forms
-from SocialApp.models import UserProfile,Posts,Comments
+from SocialApp.models import UserProfile,Posts,Comments,Stories
 
 class RegistrationForm(UserCreationForm):
     
@@ -27,3 +27,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
         fields = ["text"]
+class StoryForm(forms.ModelForm):
+    
+    class Meta:
+        model=Stories
+        fields=["text","post_image"]

@@ -37,7 +37,7 @@
     </div> {% endcomment %}
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">LINKSPHERE</a>
+    <a class="navbar-brand" href="#">LINKSPHERE</a><img src="{% static "social/images/Logo.png" %}" class="rounded-circle" alt="logo" width="50"height="50">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -54,15 +54,13 @@
             Dropdown
           </a>
           <ul class="dropdown-menu">
-             <li><a class="dropdown-item" href="{% url 'profile-detail' user.Profile.pk %}">Edit-Profile</a></li>
+             <li><a class="dropdown-item" href="{% url 'profile-detail' user.Profile.pk %}">{{request.user}} Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'profileList'%}">View Profiles</a></li>
            <li><a class="dropdown-item" href="{%url 'profile-update' request.user.Profile.id %}">Edit-Profile</a></li>
            
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
+       
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
@@ -93,18 +91,32 @@
    
     <h1 style="margin-Left:700px;margin-top:50px">USER-PROFILE<i class="fa-solid fa-circle-user"></i></h1>
 
+
     <div style="margin-left:750px">
+      <div class="d-flex">
         <button type="submit" class="btn btn-primary">Add Post</button>
-        <button type="submit" class="btn btn-danger">UnFollow</button> 
+         {%if request.user != data.user%}
+        <div class="media" style="margin-left:2px">
+          <form action="{% url 'block' data.id %}" method="post">
+            {% csrf_token %}
+            {%if data in request.user.Profile.block.all%}
+             <button type="submit" class="btn btn-danger" name="action" value="unblock">Unblock</button> 
+             {%else%}
+           <button type="submit" class="btn btn-primary" name="action" value="block">Block</button> 
+            {%endif%}
+          </form>
+        </div>
+        {%endif%}
+      </div>
         <div class="card" style="margin-top:10px;;width:35rem;margin-left:-100px">
   <div class="card-body d-flex">
      <div>
        {%if data.profilePic%}
-    <img src="{{data.profilePic.url}}" class="card-img-top">
+    <img src="{{data.profilePic.url}}" class="rounded-circle" width="100" height="100">
     {%else%}
-  <img src="{% static "social/images/profilepic.jpg" %}" class="card-img-top" alt="Antony's application photo">
+  <img src="{% static "social/images/profilepic.jpg" %}" class="rounded-circle" alt="Antony's application photo" width="100" height="100">
   {%endif%}
-     <h6>{{request.user}}</h6>
+     <h6 style="margin-left:30px">{{data.user}}</h6>
     </div>
     <div style="margin-left:20px">
         <h5 class="text-primary">{{data.following.count}}</h5>
@@ -115,7 +127,7 @@
         <h6>Followers</h6>
     </div>
     <div style="margin-left:45px">
-        <h5 class="text-primary">{{data.block.count}}</h5>
+        <h5 class="text-danger">{{data.block.count}}</h5>
         <h6>Blocked</h6>
     </div>
     <div style="margin-left:45px">
@@ -136,7 +148,7 @@
 
 <div style="margin-top:90px;margin-left:100px">
        
-        <h6 style="margin-left:350px;margin-top:2px">About {{request.user}}</h6>
+        <h6 style="margin-left:350px;margin-top:2px">About {{data.user}}</h6>
        <div>
          {%if data.about%}
     {{data.about}}
@@ -144,29 +156,49 @@
 <h6>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</h6>
   {%endif%}
        </div>
-       <h6 style="margin-left:350px">PROFILE-DETAILS<i class="fa-solid fa-circle-user"></i></h6>
-    <div>
+       <div class="card mt-5" style="width:30rem">
+        <h6 style="margin-left:150px" class="mt-2">PROFILE-DETAILS<i class="fa-solid fa-circle-user"></i></h6>
+  <div class="card-body" style="margin-left:20px">
+    <div class="d-flex">
+       Name: {{data.user}}
+      <div style="margin-left:100px"> Address:{{data.address}}</div>
+    </div>
+    <div class="d-flex mt-3">
+      DOB: {{data.dob}}
+      <div style="margin-left:70px"> Phone:{{data.phone}}
+
+      </div>
+      
+    </div>
+    {%if data.bio%}
+      <div style="margin-top:20px;margin-left:1px">
+      Bio: {{data.bio}}
+      {%else%}
+       Bio: none
+      </div>
+      {%endif%}
+  </div>
+</div>
+    {% comment %} <div>
        Name: {{request.user}}
       
     </div>
     <div>
-       Bio: {{data.bio}}
+         Name: {{request.user}}
       
     </div>
 
  <div>
  Address:{{data.address}}
  </div>
- {% comment %} <div>
- Phone Number:{{data.phone}}
- </div> {% endcomment %}
+
  <div class>
  Date of Birth:{{data.dob}}
  </div>
  <div class>
  Phone Number:{{data.phone}}
  </div>
-   </div>
+   </div> {% endcomment %}
 </div>
 {% comment %} <div class="card" style="margin-top:20px;;width:35rem;margin-left:400px">
   <div class="card-body d-flex">

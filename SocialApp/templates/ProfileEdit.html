@@ -37,7 +37,7 @@
     </div> {% endcomment %}
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">LINKSPHERE</a>
+    <a class="navbar-brand" href="#">LINKSPHERE</a><img src="{% static "social/images/Logo.png" %}" class="rounded-circle" alt="logo" width="50"height="50">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -54,15 +54,13 @@
             Dropdown
           </a>
           <ul class="dropdown-menu">
-             <li><a class="dropdown-item" href="{% url 'profile-detail' user.Profile.pk %}">Edit-Profile</a></li>
+             <li><a class="dropdown-item" href="{% url 'profile-detail' user.Profile.pk %}">{{request.user}}Profile</a></li>
             <li><a class="dropdown-item" href="{% url 'profileList'%}">View Profiles</a></li>
            <li><a class="dropdown-item" href="{%url 'profile-update' request.user.Profile.id %}">Edit-Profile</a></li>
            
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
+       
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
@@ -75,7 +73,7 @@
  {% if request.user.Profile.profilePic %}
   <img src="{{ request.user.Profile.profilePic.url }}" class="rounded-circle" alt="User Avatar" width="50" height="50">
 {% else %}
-  <img src="{% static 'social/images/login.png' %}" class="rounded-circle" alt="Default Avatar" width="50" height="50">
+  <img src="{% static 'social/images/profilePic.png' %}" class="rounded-circle" alt="Default Avatar" width="50" height="50">
 {% endif %}
     </div>
   </div>
@@ -88,18 +86,18 @@
        
     </div>
     
-    <div class="card"style="width:25rem;margin-top:40px;margin-left:500px">
+    <div class="card"style="width:25rem;margin-top:40px;margin-left:600px">
   <div class="card-body">
         <h6 style="margin-left:100px">EDIT USER-PROFILE<i class="fa-solid fa-circle-user"></i></h6>
         
-   <form action=""method="POST" enctype="multipart/form-data">
+   <form action=""method="post" enctype="multipart/form-data">
         {%csrf_token%}
         {% comment %} {{form.as_p}} {% endcomment %}
-        <div style="margin-left:40px">
-           {%if data.profilePic%}
-    <img src="{{form.profilePic.value.url}}" class="card-img-top">
+        <div style="margin-left:90px">
+           {%if form.profilePic.value%}
+    <img src="{{form.profilePic.value.url}}" class="rounded-circle"width="200" height="180">
     {%else%}
-  <img src="{% static "social/images/profilepic.jpg" %}" class="card-img-top" alt="Antony's application photo"width="50" height="90">
+  <img src="{% static "social/images/profilePic.jpg" %}" class="card-img-top" alt="Antony's application photo" width="50" height="90">
   {%endif%}
         
 

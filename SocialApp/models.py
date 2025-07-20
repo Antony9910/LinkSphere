@@ -27,7 +27,7 @@ class Posts(models.Model):
     
     #Print title of post
     def __str__(self):
-        return self.title 
+        return self.title  
     
 class Comments(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE,related_name="comment")
@@ -47,10 +47,11 @@ class Stories(models.Model):
     expiry_date=models.DateField()
     def __str__(self):
         return self.text
+    #automatically save expiry date
     def save(self,*args,**kwargs):
         if not self.expiry_date:
-            self.expiry_date=self.created_date+timezone.timedelta(days=1)
-        super().save(*args,**kwargs)
+            self.expiry_date=timezone.now()+timezone.timedelta(days=1)
+            super().save(*args,**kwargs) 
 #create signal for creating userprofile object
 def create_profile(sender,created,instance,**kwargs): #created:whether objects are created or not
     if created:

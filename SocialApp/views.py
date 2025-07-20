@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
+from django.utils import timezone
 
 from django.views.generic import FormView,CreateView,TemplateView,View,UpdateView,DetailView,ListView
 
-from SocialApp.forms import RegistrationForm,LoginForm,UserProfileForm,PostForm,CommentForm
+from SocialApp.forms import RegistrationForm,LoginForm,UserProfileForm,PostForm,CommentForm,StoryForm
 from django.contrib.auth import authenticate,login,logout
-from SocialApp.models import UserProfile,Posts
+from SocialApp.models import UserProfile,Posts,Stories
 
 #Rendering this form into html page
 class SignUpView(CreateView):
@@ -51,7 +52,19 @@ class IndexView(CreateView,ListView):
         return super().form_valid(form)
     def get_success_url(self):
         return reverse("Index")
-    # def get_queryset(self):
+    #to get post in descending order and exclude post of blocked user
+    def get_queryset(self):
+        blocked_list=self.request.user.Profile.block.all()
+        blockedProfile_id=[pr.user.id for pr in blocked_list]
+        print(blockedProfile_id)
+        qs=Posts.objects.all().exclude(user__id__in=blockedProfile_id,user=self.request.user).order_by("-created_date")
+        return qs
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        current_date=timezone.now()
+        context["stories"]=Stories.objects.filter(expiry_date__gte=current_date)
+        return context
+    # def get_queryset(self):=
     #     return Posts.objects.filter(user=self.request.user)
     
     #TO add user filed we write this code
@@ -119,4 +132,23 @@ class CommentView(CreateView):
         form.instance.user=self.request.user
         form.instance.post=post_objects
         return super().form_valid(form)
-    
+
+class BlockView(View):
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        profile_object=UserProfile.objects.get(id=id)
+        
+        action=request.POST.get("action")
+        if action=="block":
+            request.user.Profile.block.add(profile_object)
+        elif action=="unblock":
+              request.user.Profile.block.remove(profile_object)
+        return redirect("Index")
+class StoryCreateView(View):
+    def post(self,request,*args,**kwargs):
+        form=StoryForm(request.POST,files=request.FILES)
+        if form.is_valid():
+            form.instance.user=request.user
+            form.save()
+            return redirect("Index")
+        return redirect("Index")
